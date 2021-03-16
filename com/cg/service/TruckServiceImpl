@@ -1,0 +1,25 @@
+package com.cg.service;
+
+import com.cg.dao.TruckDao;
+import com.cg.dao.TruckDaoImpl;
+
+public class TruckServiceImpl implements TruckService {
+	private TruckDao tDao;
+
+	public TruckServiceImpl() {
+		tDao = new TruckDaoImpl();
+	}
+
+	@Override
+	public void showTruck() {
+		tDao.showTruck();
+
+	}
+
+	@Override
+	public void bookTruck(String custId) {
+		tDao.bookTruck(custId);
+
+	}
+
+}
