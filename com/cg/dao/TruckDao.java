@@ -1,11 +1,18 @@
 package com.cg.dao;
 
-import org.apache.log4j.Logger;
+import java.util.HashMap;
+import java.util.Map;
+
+import com.cg.bean.Truck;
 
 public interface TruckDao {
 
+	public Map<Integer, Truck> truckMap = new HashMap<>();
+	
 	void showTruck();
 
-	void bookTruck(String custId);
+	int createBooking(Truck tr, int truckId, int truckWant, String custId, String mobile, String dateStr);
+
+	void showBookingDetails();
 
 }
