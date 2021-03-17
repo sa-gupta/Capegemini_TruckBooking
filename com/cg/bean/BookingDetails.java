@@ -5,12 +5,16 @@ public class BookingDetails {
 	private int truckId;
 	private String mobile;
 	private String dateOfBooking;
+	private String truckType;
+	private Double totalCost;
 
-	public BookingDetails(String custId, int truckId, String mobile, String dateOfBooking) {
+	public BookingDetails(String custId, int truckId,String truckType, String mobile, String dateOfBooking, Double totalCost) {
 		this.custId = custId;
 		this.truckId = truckId;
+		this.truckType = truckType;
 		this.mobile = mobile;
 		this.dateOfBooking = dateOfBooking;
+		this.totalCost = totalCost;
 	}
 
 	public String getCustId() {
@@ -44,11 +48,28 @@ public class BookingDetails {
 	public void setDateOfBooking(String dateOfBooking) {
 		this.dateOfBooking = dateOfBooking;
 	}
+	
+	public Double getTotalCost() {
+		return totalCost;
+	}
+
+	public void setTotalCost(Double totalCost) {
+		this.totalCost = totalCost;
+	}
+	
+	public String getTruckType() {
+		return truckType;
+	}
+
+	public void setTruckType(String truckType) {
+		this.truckType = truckType;
+	}
 
 	@Override
 	public String toString() {
-		return "BookingDetails [custId=" + custId + ", truckId=" + truckId + ", mobile=" + mobile + ", dateOfBooking="
-				+ dateOfBooking + "]\n";
+		return String.format("%-15s%-18s%-12s%-12s%f",custId,truckType,mobile,dateOfBooking,totalCost);
+//		return "BookingDetails [custId=" + custId + ", truckId=" + truckId + ", mobile=" + mobile + ", dateOfBooking="
+//				+ dateOfBooking + "]\n";
 	}
 
 }
