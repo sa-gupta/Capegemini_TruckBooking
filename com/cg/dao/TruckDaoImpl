@@ -1,8 +1,6 @@
 package com.cg.dao;
 
-import java.time.LocalDate;
 import java.util.HashMap;
-import java.util.InputMismatchException;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -12,11 +10,11 @@ import com.cg.bean.BookingDetails;
 import com.cg.bean.Truck;
 
 public class TruckDaoImpl implements TruckDao {
-	private int bookingId = 1101;
-	private Map<Integer, Truck> truckMap = new HashMap<>();
-	private Map<Integer, BookingDetails> detailMap = new HashMap<>();
+	private int bookingId = 1100;
+	private Map<Integer, BookingDetails> bookingDetailMap = new HashMap<>();
 	Scanner scan = new Scanner(System.in);
 	Logger logger = Logger.getLogger(TruckDao.class);
+
 	public TruckDaoImpl() {
 
 		truckMap.put(1000, new Truck("20 Ton Trailer", "Mumbai", "Delhi", 30000, 3));
@@ -31,84 +29,24 @@ public class TruckDaoImpl implements TruckDao {
 
 	@Override
 	public void showTruck() {
-		System.out.println(truckMap.toString());
+		for (Integer truckId : truckMap.keySet()) {
+			System.out.println(truckId + "       " + truckMap.get(truckId));
+		}
 		logger.info("showTruck Method called");
 
 	}
 
+	public int createBooking(Truck tr, int truckId, int truckWant, String custId, String mobile, String dateStr) {
+		bookingDetailMap.put(bookingId, new BookingDetails(custId, truckId,tr.getTruckType() ,mobile, dateStr,tr.getCharge()*(double)truckWant));
+		tr.setAvailable(tr.getAvailable() - truckWant);
+		return bookingId++;
+	}
+
 	@Override
-	public void bookTruck(String custId) {
-		String mobile;
-		String dateStr;
-		int truckId;
-		int truckWant;
-		LocalDate date;
-		boolean loop =true;
-		while(loop) {
-			try {
-				System.out.println("Please enter the truckId :");
-				truckId = scan.nextInt();
-				Truck tr = truckMap.get(truckId);
-				if(tr == null) {
-					System.out.println("No truck available with Id : "+truckId);
-				}else {
-					System.out.println("Enter Number of trucks : ");
-					truckWant = scan.nextInt();
-					if (checkAvailable(tr, truckWant)) {
-						System.out.println("Enter Customer Mobile number :");
-						mobile = scan.next();
-						if (checkMobile(mobile)) {
-							System.out.println("Enter date of Transportation (YYYY-MM-DD): ");
-							dateStr = scan.next();
-							if (checkDateFormat(dateStr)) {
-								date = LocalDate.parse(dateStr);
-								int days = date.compareTo(LocalDate.now());
-								if (days < 0) {
-									System.out.println("Date should be greater than todays date.");
-								} else {
-									createBooking(tr, truckId, truckWant, custId, mobile, dateStr);
-									loop = false;
-								}
-							} else {
-								System.out.println("Wrong Date Format");
-							}
-						} else {
-							System.out.println("Enter 10 digits.");
-						}
-					} else {
-						System.out.println("Only " + tr.getAvailable() + " Trucks are available.");
-					}
-				}
-			}catch (InputMismatchException e) {
-				System.out.println("Wrong Input");
-				scan.nextLine();
-			}
+	public void showBookingDetails() {
+		for (Integer bookInteger : bookingDetailMap.keySet()) {
+			System.out.println(bookInteger+"         "+bookingDetailMap.get(bookInteger));
 		}
 		
-		
 	}
-
-	public int createBooking(Truck tr, int truckId, int truckWant, String custId, String mobile, String dateStr) {
-		detailMap.put(bookingId, new BookingDetails(custId, truckId, mobile, dateStr));
-		System.out.println("Thank you. Your booking Id is "+bookingId);
-		bookingId++;
-		tr.setAvailable(tr.getAvailable() - truckWant);
-		
-		return bookingId;
-	}
-
-	public boolean checkMobile(String mobile) {
-		String mobileRegex = "^\\d{10}$";
-		return mobile.matches(mobileRegex);
-	}
-
-	public boolean checkDateFormat(String dateStr) {
-		String dateRegex = "^(\\d{4}-\\d{2}-\\d{2})$";
-		return dateStr.matches(dateRegex);
-	}
-
-	public boolean checkAvailable(Truck tr, int truckWant) {
-		return tr.getAvailable() >= truckWant ? true : false;
-	}
-
 }
