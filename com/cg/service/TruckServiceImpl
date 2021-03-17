@@ -1,5 +1,9 @@
 package com.cg.service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
+
+import com.cg.bean.Truck;
 import com.cg.dao.TruckDao;
 import com.cg.dao.TruckDaoImpl;
 
@@ -17,9 +21,62 @@ public class TruckServiceImpl implements TruckService {
 	}
 
 	@Override
-	public void bookTruck(String custId) {
-		tDao.bookTruck(custId);
+	public boolean isCustIdValid(String custId) {
+		String idRegex = "^([A-Z]\\d{6})$";
+		return custId.matches(idRegex);
+	}
 
+	@Override
+	public boolean isValidTruckId(int truckId) {
+		return TruckDao.truckMap.get(truckId) == null ? false:true;
+	}
+
+	@Override
+	public boolean isTruckAvailable(int truckId,int truckWant) {
+		
+		return TruckDao.truckMap.get(truckId).getAvailable() >= truckWant ? true : false;
+	}
+
+	@Override
+	public boolean isValidMobile(String mobile) {
+		String mobileRegex = "^\\d{10}$";
+		return mobile.matches(mobileRegex);
+	}
+
+	@Override
+	public boolean isValidDate(String dateStr) {
+		String dateRegex = "^(\\d{4}-\\d{2}-\\d{2})$";
+		LocalDate date;
+		if(dateStr.matches(dateRegex)) {
+			try {
+				date = LocalDate.parse(dateStr);
+				int dateSub = date.compareTo(LocalDate.now());
+				if (dateSub > 0) {
+					return true;
+				}else
+					return false;
+			}catch(DateTimeParseException e) {
+				
+			}
+		}else
+			return false;
+		return false;
+	}
+
+	@Override
+	public int createBooking(Truck tr, int truckId, int truckWant, String custId, String mobile, String dateStr) {
+		return tDao.createBooking(tr,truckId,truckWant,custId,mobile,dateStr);
+	}
+
+	@Override
+	public Truck getTruckObj(int truckId) {
+		return TruckDao.truckMap.get(truckId);
+	}
+
+	@Override
+	public void showBookingDetails() {
+		tDao.showBookingDetails();
+		
 	}
 
 }
