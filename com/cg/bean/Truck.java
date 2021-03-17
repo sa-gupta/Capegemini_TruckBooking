@@ -58,7 +58,8 @@ public class Truck {
 
 	@Override
 	public String toString() {
-		return " truckType=" + truckType + ", origin=" + origin + ", destination=" + destination + ", charge=" + charge
-				+ ", available=" + available + "]\n";
+		
+//		return truckType+"          "+origin+"      "+destination+"    "+charge+"    "+available;
+		return String.format("%-18s%-11s%-16s%-10d%d",truckType,origin,destination,charge,available);
 	}
 }
