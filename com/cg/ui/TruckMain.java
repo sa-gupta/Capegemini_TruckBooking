@@ -1,11 +1,13 @@
 package com.cg.ui;
 
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
 
 import com.cg.bean.Truck;
 import com.cg.service.TruckService;
 import com.cg.service.TruckServiceImpl;
+import com.cg.util.TruckException;
 
 public class TruckMain {
 	TruckService tService;
@@ -33,7 +35,10 @@ public class TruckMain {
 					if (tService.isCustIdValid(custId)) {
 						System.out.println("Please see the truck details below ");
 						System.out.println("TruckId    TruckType         Origin     Destination     Charge    AvailableNos");
-						tService.showTruck();
+						List<Truck> truckList = tService.showTruck();
+						for (Truck truck : truckList) {
+							System.out.println(truck);
+						}
 						System.out.println("Please Enter the Truck ID : ");
 						truckId = scan.nextInt();
 						if(tService.isValidTruckId(truckId)) {
@@ -47,7 +52,8 @@ public class TruckMain {
 									System.out.println("Enter Date of Transportation (YYYY-MM-DD): ");
 									date = scan.next();
 									if(tService.isValidDate(date)) {
-										System.out.println("Thank you. Your booking Id is ."+tService.createBooking(tr,truckId,truckWant,custId,mobile,date));
+										System.out.println("Thank you. Your booking Id is ."+
+												tService.createBooking(tr,truckId,truckWant,custId,mobile,date));
 									}else
 										System.out.println("Date is not correct.");
 								}else
@@ -70,6 +76,12 @@ public class TruckMain {
 //				break;
 			case 2:
 				System.out.println("Exiting System, Thank You for Using ");
+				try {
+					tService.closeConnection();
+				} catch (TruckException e) {
+					e.printStackTrace();
+				}
+				scan.close();
 				System.exit(0);
 				break;
 			default:
