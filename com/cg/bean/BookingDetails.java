@@ -1,20 +1,44 @@
 package com.cg.bean;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+@Entity
+@Table(name="booking_details")
 public class BookingDetails {
+	@Id
+	@SequenceGenerator(allocationSize = 1,name = "book_seq", sequenceName="book_seq")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "book_seq")
+	private long bookingId;
 	private String custId;
 	private int truckId;
 	private String mobile;
-	private String dateOfBooking;
+	@Temporal(TemporalType.TIMESTAMP)
+	private java.util.Date dateOfBooking;
 	private String truckType;
-	private Double totalCost;
+	private int totalCost;
 
-	public BookingDetails(String custId, int truckId,String truckType, String mobile, String dateOfBooking, Double totalCost) {
+	public BookingDetails(String custId, int truckId,String truckType, String mobile, java.util.Date dateOfBooking, int totalCost) {
 		this.custId = custId;
 		this.truckId = truckId;
 		this.truckType = truckType;
 		this.mobile = mobile;
 		this.dateOfBooking = dateOfBooking;
 		this.totalCost = totalCost;
+	}
+	
+	public long getBookingId() {
+		return bookingId;
+	}
+
+	public void setBookingId(long bookingId) {
+		this.bookingId = bookingId;
 	}
 
 	public String getCustId() {
@@ -41,19 +65,19 @@ public class BookingDetails {
 		this.mobile = mobile;
 	}
 
-	public String getDateOfBooking() {
+	public java.util.Date getDateOfBooking() {
 		return dateOfBooking;
 	}
 
-	public void setDateOfBooking(String dateOfBooking) {
+	public void setDateOfBooking(java.util.Date dateOfBooking) {
 		this.dateOfBooking = dateOfBooking;
 	}
 	
-	public Double getTotalCost() {
+	public int getTotalCost() {
 		return totalCost;
 	}
 
-	public void setTotalCost(Double totalCost) {
+	public void setTotalCost(int totalCost) {
 		this.totalCost = totalCost;
 	}
 	
